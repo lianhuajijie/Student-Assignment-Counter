@@ -1,0 +1,37 @@
+#!/bin/bash
+
+FILE=$1
+#!/bin/bash
+
+sort -k3,3 "$FILE" | awk -F' ' '
+BEGIN {
+    previous_student = ""
+}
+{
+    student = $3
+    assignment = $4
+
+    if (previous_student == "") {
+        previous_student = student
+    }
+
+    if (student != previous_student) {
+        print "Student:", previous_student
+        for (a in ass_times) {
+            print a ":" ass_times[a]
+        }
+        print ""
+        delete ass_times
+        previous_student = student
+    }
+
+    ass_times[assignment]++
+}
+END {
+    if (previous_student != "") {
+        print "Student:", previous_student
+        for (a in ass_times) {
+            print a ":" ass_times[a]
+        }
+    }
+}'
